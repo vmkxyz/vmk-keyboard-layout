@@ -56,7 +56,7 @@ A: Probably macos.
 # Troubleshooting
 ## System doesn't see the layout (e.g. using a GUI)
 If your system can't find the layout, try putting this into `/usr/share/X11/xkb/rules/evdev.xml` and then reboot (I like putting it in between the Czech and the Danish layouts, just search for Danish, slightly above you should see </layout> followed by <layout> under it, pu the following in between those two):
-````
+```xml
     <layout>
       <configItem>
         <name>vmk</name>
@@ -76,7 +76,20 @@ If your system can't find the layout, try putting this into `/usr/share/X11/xkb/
 	</variant>
       </variantList>
     </layout>
-````
+```
+
+## Can't update xkeyboard-config
+If you're getting an error like:
+```
+error: failed to commit transaction (conflicting files)
+xkeyboard-config: /usr/share/X11/xkb exists in filesystem
+Errors occurred, no packages were upgraded.
+```
+while trying to update xkeyboard-config, it's because the layout file copied into /usr/share/X11/xkb/ wasn't registered with pacman, this is normal.
+To resolve, `sudo rm -r /usr/share/X11/xkb`, install xkeyboard-config and copy the layout file in again.
+
+TIP: On Arch based distributions, run `pacman -Qo /usr/share/X11/xkb` to check which package owns a directory.
+Running this on /usr/share/X11/xkb in the aforementioned case would return something like `No package owns /usr/share/X11/xkb`
 
 ## Can't add multiple layouts on Windows
 As far as I know, you can only have one custom keyboard layout on Windows at a time, so if you want to use another one, delete the previous.
